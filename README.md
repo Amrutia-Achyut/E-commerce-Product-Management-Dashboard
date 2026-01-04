@@ -24,6 +24,15 @@ A server-side rendered (SSR) administrative dashboard for managing products in a
 - **Image Storage**: Cloudinary
 - **Database**: MongoDB with Mongoose
 
+## 🚀 Live Deployment
+
+This project is deployed and running in a production-like environment.
+
+🔗 **Live Link:** https://your-deployment-link.com
+
+> Note: Performance, availability, and correctness are continuously monitored during development.
+> ⚠️ The deployment may take a few seconds to wake up if inactive.
+
 ## Getting Started
 
 ### Prerequisites
