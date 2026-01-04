@@ -17,7 +17,10 @@ interface ProductFormProps {
 export default function ProductForm({ initialData, isEdit = false }: ProductFormProps) {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
-  const [images, setImages] = useState<string[]>((initialData?.images || []).filter((img): img is string => img !== undefined));
+  const initialImages: string[] = initialData?.images && Array.isArray(initialData.images) 
+    ? initialData.images.filter((img): img is string => typeof img === 'string' && img !== undefined)
+    : [];
+  const [images, setImages] = useState<string[]>(initialImages);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
