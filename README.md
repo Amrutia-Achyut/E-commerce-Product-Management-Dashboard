@@ -28,7 +28,7 @@ A server-side rendered (SSR) administrative dashboard for managing products in a
 
 This project is deployed and running in a production-like environment.
 
-🔗 **Live Link:** https://your-deployment-link.com
+🔗 **Live Link:** https://e-commerce-product-management-dashb.vercel.app/
 
 > Note: Performance, availability, and correctness are continuously monitored during development.
 > ⚠️ The deployment may take a few seconds to wake up if inactive.
