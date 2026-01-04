@@ -17,10 +17,12 @@ interface ProductFormProps {
 export default function ProductForm({ initialData, isEdit = false }: ProductFormProps) {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
-  const initialImages: string[] = initialData?.images && Array.isArray(initialData.images) 
-    ? initialData.images.filter((img): img is string => typeof img === 'string' && img !== undefined)
-    : [];
-  const [images, setImages] = useState<string[]>(initialImages);
+  const [images, setImages] = useState<string[]>(() => {
+    if (initialData?.images && Array.isArray(initialData.images)) {
+      return initialData.images.filter((img): img is string => typeof img === 'string');
+    }
+    return [];
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
