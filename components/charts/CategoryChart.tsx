@@ -7,7 +7,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -20,11 +20,15 @@ interface CategoryChartProps {
 }
 
 export default function CategoryChart({ categoryStats }: CategoryChartProps) {
-  const [chartData, setChartData] = useState<any>(null);
+  // Filter out null/undefined categories and create a stable data structure
+  const filteredStats = useMemo(() => {
+    return categoryStats.filter((cat) => cat.category && cat.category.trim() !== '');
+  }, [categoryStats]);
 
-  useEffect(() => {
-    if (categoryStats.length === 0) {
-      setChartData({
+  // Create chart data with a key based on the data to force updates
+  const chartData = useMemo(() => {
+    if (!filteredStats || filteredStats.length === 0) {
+      return {
         labels: ['No Data'],
         datasets: [
           {
@@ -32,8 +36,7 @@ export default function CategoryChart({ categoryStats }: CategoryChartProps) {
             backgroundColor: ['rgba(200, 200, 200, 0.8)'],
           },
         ],
-      });
-      return;
+      };
     }
 
     const colors = [
@@ -45,20 +48,25 @@ export default function CategoryChart({ categoryStats }: CategoryChartProps) {
       'rgba(167, 85, 247, 0.8)',
     ];
 
-    setChartData({
-      labels: categoryStats.map((cat) => cat.category),
+    return {
+      labels: filteredStats.map((cat) => cat.category),
       datasets: [
         {
-          data: categoryStats.map((cat) => cat.count),
-          backgroundColor: colors.slice(0, categoryStats.length),
+          data: filteredStats.map((cat) => cat.count),
+          backgroundColor: colors.slice(0, filteredStats.length),
           borderWidth: 2,
           borderColor: '#fff',
         },
       ],
-    });
-  }, [categoryStats]);
+    };
+  }, [filteredStats]);
 
-  const options = {
+  // Create a unique key based on the data to force re-render
+  const chartKey = useMemo(() => {
+    return JSON.stringify(filteredStats.map((cat) => `${cat.category}-${cat.count}`));
+  }, [filteredStats]);
+
+  const options = useMemo(() => ({
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -74,13 +82,13 @@ export default function CategoryChart({ categoryStats }: CategoryChartProps) {
         },
       },
     },
-  };
+  }), []);
 
   if (!chartData) return <div>Loading chart...</div>;
 
   return (
     <div className="chart-container">
-      <Doughnut data={chartData} options={options} />
+      <Doughnut key={chartKey} data={chartData} options={options} />
     </div>
   );
 }

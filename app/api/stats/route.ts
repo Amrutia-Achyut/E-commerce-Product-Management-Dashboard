@@ -53,12 +53,14 @@ export async function GET() {
       totalStock: totalStock[0]?.total || 0,
       totalSales: totalSales[0]?.total || 0,
       lowStockProducts,
-      categoryStats: categoryStats.map((cat) => ({
-        category: cat._id,
-        count: cat.count,
-        totalSales: cat.totalSales,
-        totalStock: cat.totalStock,
-      })),
+      categoryStats: categoryStats
+        .filter((cat) => cat._id != null) // Filter out null/undefined categories
+        .map((cat) => ({
+          category: cat._id,
+          count: cat.count,
+          totalSales: cat.totalSales,
+          totalStock: cat.totalStock,
+        })),
     };
 
     return NextResponse.json({ success: true, data: stats }, { status: 200 });
