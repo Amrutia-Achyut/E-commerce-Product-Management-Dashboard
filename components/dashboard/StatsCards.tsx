@@ -1,9 +1,13 @@
 'use client';
 
+import useSWR from 'swr';
+import axios from 'axios';
 import './dashboard.css';
 
+const fetcher = (url: string) => axios.get(url).then((res) => res.data.data);
+
 interface StatsCardsProps {
-  stats: {
+  initialStats: {
     totalProducts: number;
     activeProducts: number;
     totalStock: number;
@@ -12,35 +16,44 @@ interface StatsCardsProps {
   };
 }
 
-export default function StatsCards({ stats }: StatsCardsProps) {
+export default function StatsCards({ initialStats }: StatsCardsProps) {
+  const { data: stats } = useSWR('/api/stats', fetcher, {
+    fallbackData: initialStats,
+    revalidateOnFocus: true,
+    revalidateOnReconnect: true,
+    refreshInterval: 30000, // Refresh every 30 seconds
+  });
+
+  const displayStats = stats || initialStats;
+
   const statItems = [
     {
       title: 'Total Products',
-      value: stats.totalProducts,
+      value: displayStats.totalProducts,
       icon: '📦',
       color: '#667eea',
     },
     {
       title: 'Active Products',
-      value: stats.activeProducts,
+      value: displayStats.activeProducts,
       icon: '✅',
       color: '#48bb78',
     },
     {
       title: 'Total Stock',
-      value: stats.totalStock.toLocaleString(),
+      value: displayStats.totalStock.toLocaleString(),
       icon: '📊',
       color: '#4299e1',
     },
     {
       title: 'Total Sales',
-      value: stats.totalSales.toLocaleString(),
+      value: displayStats.totalSales.toLocaleString(),
       icon: '💰',
       color: '#ed8936',
     },
     {
       title: 'Low Stock Alert',
-      value: stats.lowStockProducts,
+      value: displayStats.lowStockProducts,
       icon: '⚠️',
       color: '#f56565',
     },

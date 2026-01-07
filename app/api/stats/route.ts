@@ -40,6 +40,7 @@ export async function GET() {
             _id: '$category',
             count: { $sum: 1 },
             totalSales: { $sum: '$sales' },
+            totalStock: { $sum: '$stock' },
           },
         },
         { $sort: { count: -1 } },
@@ -56,6 +57,7 @@ export async function GET() {
         category: cat._id,
         count: cat.count,
         totalSales: cat.totalSales,
+        totalStock: cat.totalStock,
       })),
     };
 

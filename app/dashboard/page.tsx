@@ -98,11 +98,11 @@ export default async function DashboardPage() {
         </header>
 
         <Suspense fallback={<div>Loading stats...</div>}>
-          <StatsCards stats={stats} />
+          <StatsCards initialStats={stats} />
         </Suspense>
 
         <Suspense fallback={<div>Loading charts...</div>}>
-          <ChartsSection stats={stats} products={products} />
+          <ChartsSection initialStats={stats} initialProducts={products} />
         </Suspense>
 
         <Suspense fallback={<div>Loading products...</div>}>
