@@ -193,6 +193,7 @@ export default function ProductForm({ initialData, isEdit = false }: ProductForm
                 <option value="Toys">Toys</option>
                 <option value="Food & Beverages">Food & Beverages</option>
                 <option value="Health & Beauty">Health & Beauty</option>
+                <option value="Other">Other</option>
               </select>
               {errors.category && (
                 <span className="field-error">{errors.category.message}</span>
